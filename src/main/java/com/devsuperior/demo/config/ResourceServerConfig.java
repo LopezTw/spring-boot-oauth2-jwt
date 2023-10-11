@@ -30,6 +30,7 @@ public class ResourceServerConfig {
 	@Value("${cors.origins}")
 	private String corsOrigins;
 
+	// Liberar o H2 para teste, sem isso nao da pra acessar o H2
 	@Bean
 	@Profile("test")
 	@Order(1)
@@ -45,7 +46,7 @@ public class ResourceServerConfig {
 	public SecurityFilterChain rsSecurityFilterChain(HttpSecurity http) throws Exception {
 
 		http.csrf(csrf -> csrf.disable());
-		http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+		http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll()); // deixa tudo liberado e restring a nivel de rota e serviço
 		http.oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(Customizer.withDefaults()));
 		http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 		return http.build();
